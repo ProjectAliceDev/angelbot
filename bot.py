@@ -9,15 +9,15 @@ import json
 import urllib.request
 
 bot = commands.Bot(command_prefix="$")
+possible_games = ["Doki Doki: The Angel Returns", "Minecraft", "Doki Doki Literature Club!", "Half-Life 3"]
+
+
 
 @bot.event
 async def on_ready():
     print("Running")
-    await bot.change_presence(game=discord.Game(name='Doki Doki: The Angel Returns'))
-    for channel in member.server.channels:
-        if channel.name == 'general' or channel.name == 'breakroom':
-            await bot.send_message(channel, "Hi, guys! I'm just getting everything warmed up here, ehehe~!")
-    
+    await bot.change_presence(game=discord.Game(name=random.choice(possible_games)))
+
 
 @bot.event
 async def on_member_join(member: discord.Member):
@@ -33,9 +33,12 @@ async def ping(ctx):
     
 @bot.command(pass_context=True)
 async def get_release(ctx):
-    with urllib.request.urlopen('https://theangelreturns.aliceos.app/release.json') as release_json:
-        release_data = json.loads(release_json.read().decode())
-        await bot.say("The latest release is `" + release_data["beta.build"] + "`")
+    try:
+        with urllib.request.urlopen('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json') as release_json:
+            release_data = json.loads(release_json.read().decode())
+            await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
+    except Exception as e:
+        await bot.say("Umm, something's not working. I have no clue what's going on!")
 
 
 @bot.command(pass_context=True)
