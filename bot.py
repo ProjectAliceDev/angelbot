@@ -62,7 +62,7 @@ async def get_release(ctx):
         embed.add_field(name="Build Number", value=release_data["beta"]["build"], inline=False)
         embed.add_field(name="Download Link", value=base_url + release_data["beta"]["build"], inline=False)
 
-        await bot.send(embed=embed)
+        await ctx.send(embed=embed)
 
         # await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
