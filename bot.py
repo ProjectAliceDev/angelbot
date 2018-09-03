@@ -55,7 +55,16 @@ async def get_release(ctx):
         release_request = Request('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json')
         release_request.add_header('User-Agent', "Magic Browser")
         release_data = json.loads(urlopen(release_request).read().decode())
-        await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
+
+        base_url="https://github.com/TheAngelReturns/the-angel-returns/releases/tag/"
+
+        embed = discord.Embed(title="Latest Nightly Release", description="Here's the latest information on the nightly builds.", color=0xeee657)
+        embed.add_field(name="Build Number", value=release_data["beta"]["build"], inline=False)
+        embed.add_field(name="Download Link", value=base_url + release_data["beta"]["build"], inline=False)
+
+        await ctx.send(embed=embed)
+
+        # await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working. I have no clue what's going on!\nUmm, creators, what does this mean: " + str(e) + "?")
 
@@ -79,7 +88,6 @@ async def liven_chat(ctx):
 @bot.command(pass_context=True)
 async def ask(ctx, question):
     await bot.say("`$ask has been deprecated. Please use $talk instead.`")
-    await talk(ctx, statement=question)
 
 
 @bot.command(pass_context=True)
