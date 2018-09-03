@@ -52,7 +52,7 @@ async def help(ctx):
     embed.add_field(name="$talk", value="Lets you communicate with me such as questions, statements, compliments...", inline=False)
     embed.add_field(name="$help", value="Gives this message", inline=False)
 
-    await bot.send(embed=embed)
+    await bot.say(embed=embed)
 
 
 @bot.command(pass_context=True)
