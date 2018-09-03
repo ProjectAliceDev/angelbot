@@ -58,11 +58,15 @@ async def get_release(ctx):
 
         base_url = "https://github.com/TheAngelReturns/the-angel-returns/releases/tag/"
 
-        embed = discord.Embed(title="Latest Nightly Release", description="Here's the latest information on the nightly builds.", color=0xeee657)
+        embed = discord.Embed(
+            title="Latest Nightly Release",
+            description="Here's the latest information on the nightly builds.",
+            color=0xeee657
+        )
         embed.add_field(name="Build Number", value=release_data["beta"]["build"], inline=False)
         embed.add_field(name="Download Link", value=base_url + release_data["beta"]["build"], inline=False)
 
-        await ctx.send(embed=embed)
+        await bot.say(embed=embed)
 
         # await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
