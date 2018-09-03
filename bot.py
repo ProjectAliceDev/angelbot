@@ -42,7 +42,7 @@ async def get_release(ctx):
         release_request = Request('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json')
         release_request.add_header('User-Agent', "Magic Browser")
         release_data = json.loads(urlopen(release_request).read().decode())
-        await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
+        await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working. I have no clue what's going on!\nUmm, creators, what does this mean: " + str(e) + "?")
 
