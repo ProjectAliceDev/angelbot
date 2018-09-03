@@ -25,15 +25,24 @@ async def on_member_join(member: discord.Member):
         if channel.name == 'general' or channel.name == 'breakroom':
             await bot.send_message(channel, "Welcome to my studio, \@{}!".format(member.name))
 
+
 @bot.command(pass_context=True)
 async def ping(ctx):
     await bot.say("STAHP IT!")
+
     
 @bot.command(pass_context=True)
 async def get_release(ctx):
     with urllib.request.urlopen('https://theangelreturns.aliceos.app/release.json') as release_json:
         release_data = json.loads(release_json.read().decode())
         await bot.say("The latest release is `" + release_data["beta.build"] + "`")
+
+
+@bot.command(pass_context=True)
+async def cuddle(ctx):
+    possible_responses = ["Uhh, I don't know if that works here...", "Ooh, can Eugene join us? :elephant:", "I-I don't know, no one's, uh, really cuddled with me before...", "Ehehe~"]
+    await bot.say(random.choice(possible_responses))
+
 
 @bot.command(pass_context=True)
 async def ask(ctx, question):
