@@ -19,7 +19,7 @@ async def on_ready():
     game_name = random.choice(possible_games)
     print("Alice is playing " + game_name)
     if game_name == possible_games[0]:
-        await bot.change_presence(game=discord.Game(name=game_name), status=dnd)
+        await bot.change_presence(game=discord.Game(name=game_name), status='dnd')
     else:
         await bot.change_presence(game=discord.Game(name=random.choice(possible_games)))
 
@@ -41,7 +41,7 @@ async def get_release(ctx):
     try:
         release_request = Request('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json')
         release_request.add_header('User-Agent', "Magic Browser")
-        release_data = json.loads(release_request.read().decode())
+        release_data = json.loads(urlopen(release_request).read().decode())
         await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working. I have no clue what's going on!\nUmm, creators, what does this mean: " + str(e) + "?")
