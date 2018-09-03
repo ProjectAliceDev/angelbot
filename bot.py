@@ -36,7 +36,7 @@ async def on_member_join(member: discord.Member):
             await bot.send_message(channel, "Welcome to my studio, \@{}!".format(member.mention))
 
 
-@bot.command()
+@bot.command(pass_context=True)
 async def help(ctx):
     embed = discord.Embed(
         color=0xf9c440
