@@ -18,16 +18,14 @@ possible_games = [
 ]
 
 
-
 @bot.event
 async def on_ready():
     print("Running...")
     game_name = random.choice(possible_games)
-    print("Alice is playing " + game_name)
     if game_name == possible_games[0]:
         await bot.change_presence(game=discord.Game(name=possible_games[0]), status='dnd')
     else:
-        await bot.change_presence(game=discord.Game(name=random.choice(possible_games)))
+        await bot.change_presence(game=discord.Game(name=game_name))
 
 
 @bot.event
@@ -39,7 +37,16 @@ async def on_member_join(member: discord.Member):
 
 @bot.command(pass_context=True)
 async def ping(ctx):
-    await bot.say("STAHP IT!")
+    possible_responses = [
+        "STAHP IT!",
+        "This isn't funny!",
+        "Please stop.",
+        "Uwaaa~!",
+        "I don't like this!",
+        "Halp!",
+        "`ping error`"
+    ]
+    await bot.say(random.choice(possible_responses))
 
     
 @bot.command(pass_context=True)
@@ -65,9 +72,20 @@ async def cuddle(ctx):
 
 
 @bot.command(pass_context=True)
+async def liven_chat(ctx):
+    await bot.say(":pineapple:")
+
+
+@bot.command(pass_context=True)
 async def ask(ctx, question):
+    await bot.say("`$ask has been deprecated. Please use $talk instead.`")
+    await talk(ctx, statement=question)
+
+
+@bot.command(pass_context=True)
+async def talk(ctx, statement):
     # TODO: Use responses.json instead of hard-coding the answers in.
-    if question == "Are you okay?" or question == "How are you?" or question == "Are you alright?":
+    if statement == "Are you okay?" or statement == "How are you?" or statement == "Are you alright?":
         possible_responses = [
             "I'm doing fine, I guess...",
             "Well, I'd be fine if Mio _wasn't_ having her mood swing right now!",
@@ -76,42 +94,67 @@ async def ask(ctx, question):
             "Well, I'm doing better than yesterday.",
             "Stop looking for rainclouds. I don't tolerate them on my server!"
         ]
-    elif "depression" in question or "rainclouds" in question or "depressed" in question:
+
+    elif "depression" in statement or "rainclouds" in statement or "depressed" in statement:
         possible_responses = [
             "Get these rainclouds out of here, baka!",
-            "_No rainclouds in the server_ :PissedAngel:",
+            "_No rainclouds in the server_ :angry:",
             "I always want this place to be a safe haven."
         ]
-    elif "Gman" in question or "Freeman" in question or "Half-Life" in question or "Alyx" in question:
+
+    elif "Gman" in statement or "Freeman" in statement or "Half-Life" in statement or "Alyx" in statement:
         possible_responses = [
             "Prepare for unforseen consequences.",
             "_This is where I get off..._",
             "Yeah, when _is_ Half-Life 3 coming out, anyway?",
-            "Okay, so maybe I'm tikering around with the Source engine and making  Half-Life fan game. So what?",
+            "Okay, so maybe I'm tinkering around with the Source engine and making a Half-Life fan game. So what?",
             "Rise and smell the ashes...",
             "Can we not talk about this? Please?"
         ]
-    elif "Monika" in question or "biggest fan" in question or "fan" in question:
+
+    elif "Monika" in statement or "biggest fan" in statement or "fan" in statement:
         possible_responses = [
             "Well, I certainly never expected for Monika to like me so much...",
             "It's both Monika and TZKU that like me. A lot.",
-            "The fan situation's a bit complicated, ehehe~"
+            "The fan situation's a bit complicated, ehehe~",
+            "I have many fans..."
         ]
-    elif "Where's Boris?" in question:
+
+    elif "Where's Boris?" in statement:
         possible_responses = [
-            "https://cdn.discordapp.com/attachments/481922610742165514/482312409831309315/Alice_Maymay_2.png "
+            "https://cdn.discordapp.com/attachments/481922610742165514/482312409831309315/Alice_Maymay_2.png ",
+            "Hippity hoppity, your Boris is now my property. That's how it goes, right?\nBut seriously, though, I have no clue.",
+            ":shrug:",
+            "W-why are you asking me?",
+            "Not here, not there, not anywhere to my knowledge!",
+            "Boris out, Eugene in!"
         ]
-    elif "qt" in question or "You're a Qt" in question or "Qt" in question or "you" and "qt" in question:
+
+    elif "qt" in statement or "You're a Qt" in statement or "Qt" in statement or "you" and "qt" in statement:
         possible_responses = [
             "I NIOT QT!",
             "NO\nBAKA",
-            "No. Eugene more Qt than me."
+            "No. Eugene more Qt than me.",
+            "no u"
         ]
+
+    elif "Who's Eugene?" in statement:
+        possible_responses = [
+            "Silly, Eugene's my stuffed mastodon!",
+            ":elephant:",
+            "B-but I thought you knew... :pensive:",
+            "What, am I not allowed to have stuffed animals or something?",
+            "He's the _cutest_ little stuffed mastodon!",
+            "My cuddle buddy. .^_~"
+        ]
+
     else:
         possible_responses = [
             "Sorry, I don't understand.",
             "Uwaa~!",
-            "I may be an AI now, but that doesn't mean I've properly implanted myself into Discord. I would be more than happy to answer your questions, but I can't properly express them here."
+            "Sadly, I'm not as complete as you think. It'll take some time before I can answer all of your questions.",
+            "E-Eh?",
+            "Are you talking to me or to Eugene?"
         ]
     await bot.say(random.choice(possible_responses))
 
