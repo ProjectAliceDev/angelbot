@@ -9,6 +9,7 @@ import json
 from urllib.request import Request, urlopen
 
 bot = commands.Bot(command_prefix="$")
+bot.remove_command('help')
 possible_games = [
     "Doki Doki: The Angel Returns",
     "Minecraft",
@@ -35,6 +36,25 @@ async def on_member_join(member: discord.Member):
             await bot.send_message(channel, "Welcome to my studio, \@{}!".format(member.mention))
 
 
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(
+        color=0xf9c440
+    )
+    embed.set_author(
+        name="Alice Angel Help Service",
+        icon_url="https://cdn.discordapp.com/app-icons/474592037988204556/4288eaa321797be8b09df8e68e4542cf.png?size=512"
+    )
+
+    embed.add_field(name="$ping", value="Pings me", inline=False)
+    embed.add_field(name="$get_release", value="Get the latest nightly release information.", inline=False)
+    embed.add_field(name="$cuddle", value="Lets you cuddle with me :heart:", inline=False)
+    embed.add_field(name="$talk", value="Lets you communicate with me such as questions, statements, compliments...", inline=False)
+    embed.add_field(name="$help", value="Gives this message", inline=False)
+
+    await bot.send(embed=embed)
+
+
 @bot.command(pass_context=True)
 async def ping(ctx):
     possible_responses = [
@@ -59,19 +79,20 @@ async def get_release(ctx):
         base_url = "https://github.com/TheAngelReturns/the-angel-returns/releases/tag/"
 
         embed = discord.Embed(
-            title="Latest Nightly Release",
-            description="Here's the latest information on the nightly builds.",
-            color=0xeee657
+            color=0xf9c440
         )
+
         embed.set_author(
             name="Nightly Information Release Service",
             icon_url="https://raw.githubusercontent.com/TheAngelReturns/the-angel-returns/nightly/game/mod_assets/logo.png"
         )
+
         embed.add_field(
-            name="Build Number",
+            name="Build Number (Git Commit Hash)",
             value=release_data["beta"]["build"],
             inline=False
         )
+
         embed.add_field(
             name="Download Link",
             value=base_url + release_data["beta"]["build"],
