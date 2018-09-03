@@ -6,7 +6,7 @@ import chalk
 import os
 import random
 import json
-import urllib.request
+from urllib.request import Request, urlopen
 
 bot = commands.Bot(command_prefix="$")
 possible_games = ["Doki Doki: The Angel Returns", "Minecraft", "Doki Doki Literature Club!", "Half-Life 3"]
@@ -34,9 +34,10 @@ async def ping(ctx):
 @bot.command(pass_context=True)
 async def get_release(ctx):
     try:
-        with urllib.request.urlopen(url='https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json', headers={'User-Agent' : "Magic Browser"}) as release_json:
-            release_data = json.loads(release_json.read().decode())
-            await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
+        release_request = Request('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json')
+        release_request.add_header('User-Agent' : "Magic Browser")
+        release_data = json.loads(release_dl.read().decode())
+        await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working. I have no clue what's going on!\nUmm, creators, what does this mean: " + str(e) + "?")
 
