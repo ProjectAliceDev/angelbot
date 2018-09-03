@@ -63,12 +63,23 @@ async def get_release(ctx):
             description="Here's the latest information on the nightly builds.",
             color=0xeee657
         )
-        embed.add_field(name="Build Number", value=release_data["beta"]["build"], inline=False)
-        embed.add_field(name="Download Link", value=base_url + release_data["beta"]["build"], inline=False)
+        embed.set_author(
+            name="Nightly Information Release Service",
+            icon_url="https://raw.githubusercontent.com/TheAngelReturns/the-angel-returns/nightly/game/mod_assets/logo.png"
+        )
+        embed.add_field(
+            name="Build Number",
+            value=release_data["beta"]["build"],
+            inline=False
+        )
+        embed.add_field(
+            name="Download Link",
+            value=base_url + release_data["beta"]["build"],
+            inline=False
+        )
 
         await bot.say(embed=embed)
 
-        # await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working.\nUmm, creators, what does this mean: " + str(e) + "?")
 
