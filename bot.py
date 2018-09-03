@@ -56,13 +56,13 @@ async def get_release(ctx):
         release_request.add_header('User-Agent', "Magic Browser")
         release_data = json.loads(urlopen(release_request).read().decode())
 
-        base_url="https://github.com/TheAngelReturns/the-angel-returns/releases/tag/"
+        base_url = "https://github.com/TheAngelReturns/the-angel-returns/releases/tag/"
 
         embed = discord.Embed(title="Latest Nightly Release", description="Here's the latest information on the nightly builds.", color=0xeee657)
         embed.add_field(name="Build Number", value=release_data["beta"]["build"], inline=False)
         embed.add_field(name="Download Link", value=base_url + release_data["beta"]["build"], inline=False)
 
-        await bot.send_message(embed=embed)
+        await bot.send(embed=embed)
 
         # await bot.say("The latest nightly release is `" + release_data["beta"]["build"] + "`.")
     except Exception as e:
