@@ -39,6 +39,7 @@ async def get_release(ctx):
             await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
     except Exception as e:
         await bot.say("Umm, something's not working. I have no clue what's going on!")
+        await bot.say("Umm, creators, what does this mean: " + e + "?")
 
 
 @bot.command(pass_context=True)
