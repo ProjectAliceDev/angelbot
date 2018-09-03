@@ -34,12 +34,11 @@ async def ping(ctx):
 @bot.command(pass_context=True)
 async def get_release(ctx):
     try:
-        with urllib.request.urlopen('https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json') as release_json:
+        with urllib.request.urlopen(url='https://raw.githubusercontent.com/TheAngelReturns/campbell/master/release.json', headers={'User-Agent' : "Magic Browser"}) as release_json:
             release_data = json.loads(release_json.read().decode())
             await bot.say("The latest nightly release is `" + release_data["beta.build"] + "`.")
     except Exception as e:
-        await bot.say("Umm, something's not working. I have no clue what's going on!")
-        await bot.say("Umm, creators, what does this mean: " + e + "?")
+        await bot.say("Umm, something's not working. I have no clue what's going on!\nUmm, creators, what does this mean: " + e + "?")
 
 
 @bot.command(pass_context=True)
