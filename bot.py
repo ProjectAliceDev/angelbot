@@ -33,7 +33,7 @@ async def on_ready():
 async def on_member_join(member: discord.Member):
     for channel in member.server.channels:
         if channel.name == 'general' or channel.name == 'breakroom':
-            await bot.send_message(channel, "Welcome to my studio, \@{}!".format(member.mention))
+            await bot.send_message(channel, "Welcome to my studio, {}!".format(member.mention))
 
 
 @bot.command(pass_context=True)
