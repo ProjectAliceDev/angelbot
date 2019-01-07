@@ -15,7 +15,8 @@ possible_games = [
     "Minecraft",
     "Doki Doki Literature Club!",
     "Half-Life 3",
-    "with Eugene"
+    "with Eugene",
+    "Undertale"
 ]
 
 
@@ -120,11 +121,9 @@ async def cuddle(ctx):
 async def liven_chat(ctx):
     await bot.say(":pineapple:")
 
-
-@bot.command(pass_context=True)
-async def ask(ctx, question):
-    await bot.say("`$ask has been deprecated. Please use $talk instead.`")
-
+# @bot.command(pass_context = True)
+# async def pingdev(ctx, comment):
+#     await bot.say()
 
 @bot.command(pass_context=True)
 async def talk(ctx, statement):
