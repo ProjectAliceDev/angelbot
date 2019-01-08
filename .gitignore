@@ -105,3 +105,4 @@ venv.bak/
 
 # JetBrains IDEA folder
 .idea/
+.vscode/
