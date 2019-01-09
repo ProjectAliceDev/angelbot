@@ -87,7 +87,7 @@ def handle_message(room, event):
     """
     # Make sure we didn't send this message ourselves
     print(event)
-    if "@" + USERNAME in event['sender']:
+    if "@" + matrix_username in event['sender']:
         return
     try:
         if not event['content']['msgtype'] == 'm.text':
@@ -98,8 +98,8 @@ def handle_message(room, event):
         print('Cannot handle that request')
         return
     print('Received: %s' % text)
-    if text.startswith('emote'):
-        emoji_callback(room)
+    if text.startswith('!emote'):
+        emoji_callback(room, event)
 
 @bot.event
 async def on_ready():
