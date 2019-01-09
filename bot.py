@@ -45,31 +45,61 @@ possible_games = [
     "DELTARUNE"
 ]
 
-'''
-Trains the AI with given data.
-'''
+
 def fill_with_determination():
+    '''
+    Trains the AI with given data.
+    '''
     print("Filling Alice with DETERMINATION...")
     determination.train("chatterbot.corpus.english")
     determination.train(determination_set)
     print("Done.")
-    
-    
-'''
-Upload an emoji to Matrix.
-'''
+
+
 def upload_emoji(emote_name):
+    '''
+    Upload an emoji to Matrix.
+    '''
     with open("emotes/" + emote_name + ".png", 'rb') as f:
         imgdata = f.read()
     data_url = client.upload(imgdata, 'image/png')
     room.send_image(data_url, emote_name + '.png')
 
-bbot'''
-Send an emoji
-'''
 def emoji_callback(room, event):
+    '''
+    Send an emoji
+    '''
     args = event['content']['body'].split()
     upload_emoji(args[1])
+    
+def handle_invite(room_id, state):
+    """This function handles new invites to Matrix rooms by accepting them.
+    :param room_id: Matrix room is
+    :param state: State of the Matrix room
+    """
+    room = client.join_room(room_id)
+    room.add_listener(handle_message)
+    
+def handle_message(room, event):
+    """This function handles incoming matrix events and reacts on the keyword xkcd.
+    :param room: Matrix room where message event occurred
+    :param event: Matrix event of the message
+    """
+    # Make sure we didn't send this message ourselves
+    print(event)
+    if "@" + USERNAME in event['sender']:
+        return
+    try:
+        if not event['content']['msgtype'] == 'm.text':
+            print('No text message, ignoring...')
+            return
+        text = event['content']['body']
+    except KeyError:
+        print('Cannot handle that request')
+        return
+    print('Received: %s' % text)
+    if text.startswith('emote'):
+        emoji_callback(room)
 
 @bot.event
 async def on_ready():
@@ -183,3 +213,13 @@ async def talk(ctx, statement):
 # regular servers. Go to https://discordapp.com/developers/ to
 # create your bot key.
 bot.run(os.environ.get('BOT_KEY'))
+
+client = MatrixClient(matrix_server)
+client.login_with_password(matrix_username, matrix_password)
+print('Login as %s successful' %matrix_username)
+client.add_invite_listener(handle_invite)
+for _, room in client.get_rooms().items():
+    room.add_listener(handle_message)
+client.start_listener_thread()
+while True:
+    input()
