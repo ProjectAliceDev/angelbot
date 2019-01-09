@@ -1,3 +1,7 @@
+#########################################################
+# Angelbot                                              #
+# The Alice Angel bot of HYPERDEATH                     #
+#########################################################
 import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
@@ -37,7 +41,8 @@ possible_games = [
     "Doki Doki Literature Club!",
     "Half-Life 3",
     "with Eugene",
-    "Undertale"
+    "Undertale",
+    "DELTARUNE"
 ]
 
 '''
