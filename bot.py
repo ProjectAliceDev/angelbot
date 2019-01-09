@@ -59,7 +59,7 @@ def upload_emoji(emote_name):
     data_url = client.upload(imgdata, 'image/png')
     room.send_image(data_url, emote_name + '.png')
 
-'''
+bbot'''
 Send an emoji
 '''
 def emoji_callback(room, event):
