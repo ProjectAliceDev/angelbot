@@ -9,6 +9,11 @@ import json
 from urllib.request import Request, urlopen
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
+from matrix_client.client import MatrixClient
+
+matrix_username = os.environ.get(('MATRIX_USERNAME'))
+matrix_password = os.environ.get(('MATRIX_PASSWORD'))
+matrix_server = "https://matrix.org"
 
 # Create basic chatbot
 determination = ChatBot("Alice Angel")
@@ -43,6 +48,23 @@ def fill_with_determination():
     determination.train("chatterbot.corpus.english")
     determination.train(determination_set)
     print("Done.")
+    
+    
+'''
+Upload an emoji to Matrix.
+'''
+def upload_emoji(emote_name):
+    with open("emotes/" + emote_name + ".png", 'rb') as f:
+        imgdata = f.read()
+    data_url = client.upload(imgdata, 'image/png')
+    room.send_image(data_url, emote_name + '.png')
+
+'''
+Send an emoji
+'''
+def emoji_callback(room, event):
+    args = event['content']['body'].split()
+    upload_emoji(args[1])
 
 @bot.event
 async def on_ready():
