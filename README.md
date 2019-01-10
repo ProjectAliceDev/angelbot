@@ -4,11 +4,29 @@ Discord/Matrix bot for _[The Studio](https://aliceos.app/studio/)_
 
 ![Angelbot icon](https://cdn.discordapp.com/app-icons/474592037988204556/fdfed4f7c373edb1f764b26b2665350e.png?size=128)
 
-**Angelbot** is the Discord bot for Project Alice's Studio, responsible for greeting users, starting conversation, and informing users of upcoming updates. Angelbot is written in Python and uses `discord.py` and `Chatterbot`.
+**Angelbot** is the Discord bot for Project Alice's Studio, responsible for greeting users, starting conversation, and informing users of upcoming updates. Angelbot is written in Python and uses `discord.py`, `matrix_client`, and `Chatterbot`.
 
-## Build Instructions
+## Build/Install Instructions
 
-Angelbot is designed to run on a server, mostly Heroku. To delpoy Angelbot's code to a Heroku server, follow the instructions outlined here: [upload a Python Discord bot to Heroku](https://www.youtube.com/watch?v=A97eTCCcw0g).
+Angelbot works on Python 3.5 or higher. To install any required packages, run `pip install -r requirements.txt`.
+
+You'll need to make sure that you have the following:
+
+- A Matrix account and the access token to that account
+- Discord bot key (Bot token)
+
+Run the following commands to start the Angelbot server:
+
+```bash
+export BOT_KEY=<Discord bot key>
+export MATRIX_USERNAME=<matrix username without "@" or ":matrix.org">
+export MATRIX_TOKEN=<matrix access token>
+python bot.py
+```
+
+> If you are using an app service like Heroku, you can skip the `export` commands and use the Environment Variables section of the provider instead.
+
+> This repository is also built to run on Heroku, so you won't need to worry about setting up the Procfile or the buildpack.
 
 ## License
 
