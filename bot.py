@@ -56,14 +56,24 @@ def fill_with_determination():
     print("Done.")
 
 
+def talk_callback(room, event):
+    '''
+    Sends a message.
+    '''
+    message = (event['content']['body']).replace("Alice Angel (Bot): ", "")
+    room.send_text(str(determination.get_response(message)))
+
 def upload_emoji(emote_name):
     '''
     Upload an emoji to Matrix.
     '''
-    with open("emotes/" + emote_name + ".png", 'rb') as f:
-        imgdata = f.read()
-    data_url = client.upload(imgdata, 'image/png')
-    room.send_image(data_url, emote_name + '.png')
+    try:
+        with open("emotes/" + emote_name + ".png", 'rb') as f:
+            imgdata = f.read()
+        data_url = client.upload(imgdata, 'image/png')
+        room.send_image(data_url, emote_name + '.png')
+    except Exception as e:
+        room.send_text("It looks like I can't do that... Error Info: " + str(e))
 
 def emoji_callback(room, event):
     '''
@@ -100,6 +110,8 @@ def handle_message(room, event):
     print('Received: %s' % text)
     if text.startswith('!emote'):
         emoji_callback(room, event)
+    elif text.startswith("Alice Angel (Bot):"):
+        talk_callback(room, event)
 
 @bot.event
 async def on_ready():
@@ -216,7 +228,6 @@ bot.run(os.environ.get('BOT_KEY'))
 
 client = MatrixClient(matrix_server)
 client.login_with_password(matrix_username, matrix_password)
-print('Login as %s successful' %matrix_username)
 client.add_invite_listener(handle_invite)
 for _, room in client.get_rooms().items():
     room.add_listener(handle_message)
