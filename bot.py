@@ -14,9 +14,10 @@ from urllib.request import Request, urlopen
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from matrix_client.client import MatrixClient
+from multiprocessing import Process
 
 matrix_username = os.environ.get(('MATRIX_USERNAME'))
-matrix_password = os.environ.get(('MATRIX_PASSWORD'))
+matrix_token = os.environ.get(('MATRIX_TOKEN'))
 matrix_server = "https://matrix.org"
 
 # Create basic chatbot
@@ -75,19 +76,26 @@ def upload_emoji(emote_name):
     except Exception as e:
         room.send_text("It looks like I can't do that... Error Info: " + str(e))
 
+
+def emoji_list_callback(room, event):
+    '''
+    List all emojis
+    '''
+    message = "Current Emojis: ["
+    for root, dirs, files in os.walk("emotes"):
+        for file in files:
+            message += file.replace(".png", "") + ", "
+    message += "]"
+    room.send_text(message)
+
 def emoji_callback(room, event):
     '''
     Send an emoji
     '''
     args = event['content']['body'].split()
-    if args[1] == "list":
-        room.send_text("Current Emojis:")
-        for root, dirs, files in os.walk("emotes"):
-            for file in files:
-                room.send_text(file.replace(".png", ""))
-    else:
-        upload_emoji(args[1])
-    
+    upload_emoji(args[1])
+
+
 def handle_invite(room_id, state):
     """This function handles new invites to Matrix rooms by accepting them.
     :param room_id: Matrix room is
@@ -95,14 +103,10 @@ def handle_invite(room_id, state):
     """
     room = client.join_room(room_id)
     room.add_listener(handle_message)
-    
+
+
 def handle_message(room, event):
-    """This function handles incoming matrix events and reacts on the keyword xkcd.
-    :param room: Matrix room where message event occurred
-    :param event: Matrix event of the message
-    """
     # Make sure we didn't send this message ourselves
-    print(event)
     if "@" + matrix_username in event['sender']:
         return
     try:
@@ -116,6 +120,8 @@ def handle_message(room, event):
     print('Received: %s' % text)
     if text.startswith('!emote'):
         emoji_callback(room, event)
+    elif text.startswith('!listemoji'):
+        emoji_list_callback(room, event)
     elif text.startswith("Alice Angel (Bot):"):
         talk_callback(room, event)
 
@@ -226,17 +232,16 @@ async def liven_chat(ctx):
 async def talk(ctx, statement):
     await bot.say(determination.get_response(statement))
 
-# Run the bot. This needs the environment key BOT_KEY to run!
-# This is set through Heroku usually, but can also work for
-# regular servers. Go to https://discordapp.com/developers/ to
-# create your bot key.
-bot.run(os.environ.get('BOT_KEY'))
-
-client = MatrixClient(matrix_server)
-client.login_with_password(matrix_username, matrix_password)
+print("Starting Matrix component...")
+client = MatrixClient(matrix_server, token=matrix_token, user_id="@"+matrix_username+":matrix.org")
 client.add_invite_listener(handle_invite)
 for _, room in client.get_rooms().items():
     room.add_listener(handle_message)
-client.start_listener_thread()
-while True:
-    input()
+
+# Run each part of Angelbot in a thread. This allows for Angelbot
+# to work simultaneously.
+p1 = Process(target = client.listen_forever)
+p1.start()
+
+p2 = Process(target = bot.run(os.environ.get('BOT_KEY')))
+p2.start()
