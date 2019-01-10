@@ -80,7 +80,13 @@ def emoji_callback(room, event):
     Send an emoji
     '''
     args = event['content']['body'].split()
-    upload_emoji(args[1])
+    if args[1] == "list":
+        room.send_text("Current Emojis:")
+        for root, dirs, files in os.walk("emotes"):
+            for file in files:
+                room.send_text(file.replace(".png", ""))
+    else:
+        upload_emoji(args[1])
     
 def handle_invite(room_id, state):
     """This function handles new invites to Matrix rooms by accepting them.
