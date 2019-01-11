@@ -7,7 +7,7 @@ import os
 import random
 import json
 from urllib.request import Request, urlopen
-
+from asriel.soul import *
 bot = commands.Bot(command_prefix="$")
 bot.remove_command('help')
 possible_games = [

@@ -1,4 +1,11 @@
+import asyncio
+import chalk
+import os
+import random
+import json
+from urllib.request import Request, urlopen
 from matrix_client.client import MatrixClient
+from asriel.soul import *
 
 matrix_username = os.environ.get(('MATRIX_USERNAME'))
 matrix_token = os.environ.get(('MATRIX_TOKEN'))
