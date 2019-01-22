@@ -18,7 +18,7 @@ def talk_callback(room, event):
     message = (event['content']['body']).replace("Alice Angel (Bot): ", "")
     room.send_text(str(determination.get_response(message)))
 
-def upload_emoji(emote_name):
+def upload_emoji(emote_name, where):
     '''
     Upload an emoji to Matrix.
     '''
@@ -26,9 +26,9 @@ def upload_emoji(emote_name):
         with open("emotes/" + emote_name + ".png", 'rb') as f:
             imgdata = f.read()
         data_url = client.upload(imgdata, 'image/png')
-        room.send_image(data_url, emote_name + '.png')
+        where.send_image(data_url, emote_name + '.png')
     except Exception as e:
-        room.send_text("It looks like I can't do that... Error Info: " + str(e))
+        where.send_text("It looks like I can't do that... Error Info: " + str(e))
 
 
 def emoji_list_callback(room, event):
@@ -47,7 +47,7 @@ def emoji_callback(room, event):
     Send an emoji
     '''
     args = event['content']['body'].split()
-    upload_emoji(args[1])
+    upload_emoji(args[1], room)
 
 
 def handle_invite(room_id, state):
@@ -71,7 +71,7 @@ def handle_message(room, event):
     except KeyError:
         print('Cannot handle that request')
         return
-    print('Received: %s' % text)
+    print('Received from room (' + room.display_name + '): ' + text)
     if text.startswith('!emote'):
         emoji_callback(room, event)
     elif text.startswith('!listemoji'):
