@@ -1,5 +1,5 @@
 discord
 asyncio
 pychalk
-chatterbot
+chatterbot==0.8.7
 matrix_client
